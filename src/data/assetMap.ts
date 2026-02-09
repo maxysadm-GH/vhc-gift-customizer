@@ -13,6 +13,7 @@ export interface ComboAsset {
   status: 'ready' | 'queued';
   images: string[];  // [hero, angle2, angle5, ...additional angles]
   videoUrl?: string;
+  logoPlacement?: { x: number; y: number; w: number; h: number };
 }
 
 const CDN = 'https://cdn.shopify.com/s/files/1/0012/8660/2848/files';
@@ -69,6 +70,12 @@ export const comboAssets: Record<string, ComboAsset> = {
     status: 'ready',
     images: [...defaultImages],
   },
+};
+
+export const fallbackAsset: ComboAsset = {
+  comboKey: 'fallback',
+  status: 'queued',
+  images: [...defaultImages],
 };
 
 /**

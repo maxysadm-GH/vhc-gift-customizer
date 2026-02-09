@@ -54,7 +54,13 @@ export const hangTagStyles = ['square', 'octagon', 'rectangle'] as const;
 export type MarqueeStyle = typeof marqueeStyles[number];
 export type HangTagStyle = typeof hangTagStyles[number];
 
+export type WizardStep = 'onboarding' | 'customizer' | 'preview';
+
 export interface CustomizerState {
+  step: WizardStep;
+  sessionId: string | null;
+  logoUrl: string | null;
+  logoUploading: boolean;
   level: 'duet' | 'signature';
   boxColor: ColorOption;
   foilColor: ColorOption;
@@ -70,7 +76,29 @@ export interface CustomizerState {
   message: string;
 }
 
+export type CustomizerAction =
+  | { type: 'SET_STEP'; payload: WizardStep }
+  | { type: 'SET_SESSION'; payload: { sessionId: string; logoUrl: string } }
+  | { type: 'SET_LOGO_UPLOADING'; payload: boolean }
+  | { type: 'SET_LEVEL'; payload: 'duet' | 'signature' }
+  | { type: 'SET_BOX_COLOR'; payload: ColorOption }
+  | { type: 'SET_FOIL_COLOR'; payload: ColorOption }
+  | { type: 'SET_RIBBON_COLOR'; payload: ColorOption }
+  | { type: 'SET_MARQUEE_STYLE'; payload: MarqueeStyle }
+  | { type: 'SET_HANG_TAG_STYLE'; payload: HangTagStyle }
+  | { type: 'SET_FONT'; payload: FontOption }
+  | { type: 'SET_LOGO'; payload: { file: File; previewUrl: string } }
+  | { type: 'CLEAR_LOGO' }
+  | { type: 'SET_FIELD'; payload: { field: 'companyName' | 'email' | 'message'; value: string } }
+  | { type: 'SET_QUANTITY'; payload: number }
+  | { type: 'SET_PREVIEW'; payload: { images: string[]; message: string } }
+  | { type: 'RESET' };
+
 export const defaultState: CustomizerState = {
+  step: 'onboarding',
+  sessionId: null,
+  logoUrl: null,
+  logoUploading: false,
   level: 'duet',
   boxColor: boxColors[0],
   foilColor: foilColors[0],
@@ -85,3 +113,25 @@ export const defaultState: CustomizerState = {
   quantity: 50,
   message: '',
 };
+
+export function customizerReducer(state: CustomizerState, action: CustomizerAction): CustomizerState {
+  switch (action.type) {
+    case 'SET_STEP': return { ...state, step: action.payload };
+    case 'SET_SESSION': return { ...state, sessionId: action.payload.sessionId, logoUrl: action.payload.logoUrl, logoUploading: false };
+    case 'SET_LOGO_UPLOADING': return { ...state, logoUploading: action.payload };
+    case 'SET_LEVEL': return { ...state, level: action.payload };
+    case 'SET_BOX_COLOR': return { ...state, boxColor: action.payload };
+    case 'SET_FOIL_COLOR': return { ...state, foilColor: action.payload };
+    case 'SET_RIBBON_COLOR': return { ...state, ribbonColor: action.payload };
+    case 'SET_MARQUEE_STYLE': return { ...state, marqueeStyle: action.payload };
+    case 'SET_HANG_TAG_STYLE': return { ...state, hangTagStyle: action.payload };
+    case 'SET_FONT': return { ...state, font: action.payload };
+    case 'SET_LOGO': return { ...state, logoFile: action.payload.file, logoPreviewUrl: action.payload.previewUrl };
+    case 'CLEAR_LOGO': return { ...state, logoFile: null, logoPreviewUrl: null };
+    case 'SET_FIELD': return { ...state, [action.payload.field]: action.payload.value };
+    case 'SET_QUANTITY': return { ...state, quantity: action.payload };
+    case 'SET_PREVIEW': return { ...state, step: 'preview' };
+    case 'RESET': return defaultState;
+    default: return state;
+  }
+}
