@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Box3D } from '../components/Box3D';
+import { ProductGallery } from '../components/ProductGallery';
 import { ColorSwatchPicker } from '../components/ColorSwatchPicker';
 import { FontPicker } from '../components/FontPicker';
 import { MarqueeCardPicker } from '../components/MarqueeCardPicker';
@@ -11,6 +11,7 @@ import {
   defaultState,
   boxColors, foilColors, ribbonColors, fontOptions,
 } from '../data/customization';
+import { getComboAsset } from '../data/assetMap';
 
 type Action =
   | { type: 'SET_LEVEL'; payload: 'duet' | 'signature' }
@@ -218,53 +219,14 @@ export function CustomizePage() {
         gap: 48,
         alignItems: 'start',
       }}>
-        {/* Left: Image + 3D Box */}
+        {/* Left: Product Gallery */}
         <div style={{ position: 'sticky', top: 100 }}>
-          {/* Hero product image */}
-          <div style={{
-            border: '1px solid #e5e5e5',
-            marginBottom: 24,
-            background: '#fafafa',
-          }}>
-            <img
-              src="https://cdn.shopify.com/s/files/1/0012/8660/2848/files/Vegan_9pc_001.jpg?v=1727797701"
-              alt="9-Piece Vegan Truffle Collection"
-              style={{ width: '100%' }}
-            />
-          </div>
-
-          {/* 3D Box Preview */}
-          <div style={{
-            background: '#f8f8f8',
-            border: '1px solid #e5e5e5',
-            padding: 32,
-          }}>
-            <p style={{
-              fontSize: 11,
-              fontWeight: 400,
-              letterSpacing: 2,
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              color: '#999',
-              marginBottom: 20,
-            }}>
-              Live Box Preview
-            </p>
-            <Box3D
-              boxColor={state.boxColor.hex}
-              foilColor={state.foilColor.hex}
-              ribbonColor={state.ribbonColor.hex}
-              size={220}
-            />
-            <p style={{
-              fontSize: 11,
-              textAlign: 'center',
-              color: '#bbb',
-              marginTop: 16,
-            }}>
-              Hover to pause rotation
-            </p>
-          </div>
+          <ProductGallery
+            asset={getComboAsset(state.boxColor.name, state.foilColor.name, state.ribbonColor.name)}
+            boxColorHex={state.boxColor.hex}
+            foilColorHex={state.foilColor.hex}
+            ribbonColorHex={state.ribbonColor.hex}
+          />
         </div>
 
         {/* Right: Options */}
