@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: vhc-customizer-api
+    runtime: node
+    plan: free
+    buildCommand: npm install express cors multer
+    startCommand: node server.js
+    envVars:
+      - key: AIRTABLE_API_KEY
+        sync: false
+      - key: AIRTABLE_BASE_ID
+        sync: false
+      - key: IMGBB_API_KEY
+        sync: false
+      - key: PORT
+        value: 10000

@@ -1,6 +1,6 @@
-import express from 'express';
-import cors from 'cors';
-import multer from 'multer';
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Azure deployment scripts (infra-only, not app code)
+azure-*.ps1
+deploy-azure.ps1
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
