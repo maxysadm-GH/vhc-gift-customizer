@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { products } from '../data/products';
+import { products, getShopifyProductUrl } from '../data/products';
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
   const full = Math.floor(rating);
@@ -78,27 +78,35 @@ export function CollectionPage() {
                 <p style={{ fontSize: 15, fontWeight: 400, marginTop: 8, color: '#333' }}>
                   ${product.price.toFixed(2)}
                 </p>
-                <button style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '1px solid #333',
-                  borderRadius: 0,
-                  background: '#fff',
-                  color: '#333',
-                  fontSize: 13,
-                  fontWeight: 400,
-                  letterSpacing: 1,
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  marginTop: 16,
-                  fontFamily: "'Roboto', sans-serif",
-                  transition: 'all 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#333'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#333'; }}
+                <a
+                  href={getShopifyProductUrl(product.shopifyHandle)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid #333',
+                    borderRadius: 0,
+                    background: '#fff',
+                    color: '#333',
+                    fontSize: 13,
+                    fontWeight: 400,
+                    letterSpacing: 1,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    marginTop: 16,
+                    fontFamily: "'Roboto', sans-serif",
+                    transition: 'all 0.2s',
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    boxSizing: 'border-box',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#333'; (e.currentTarget as HTMLAnchorElement).style.color = '#fff'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#fff'; (e.currentTarget as HTMLAnchorElement).style.color = '#333'; }}
                 >
-                  Add to Bag
-                </button>
+                  Shop on VosgesChocolate.com
+                </a>
                 {product.customizable && (
                   <button
                     onClick={() => navigate('/customize')}

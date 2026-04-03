@@ -9,6 +9,14 @@ export interface Product {
   reviewCount: number;
   customizable: boolean;
   flavors?: string;
+  shopifyHandle: string;
+  shopifyVariantId?: string;
+}
+
+const SHOPIFY_STORE = 'https://www.vosgeschocolate.com';
+
+export function getShopifyProductUrl(handle: string): string {
+  return `${SHOPIFY_STORE}/products/${handle}`;
 }
 
 export const products: Product[] = [
@@ -23,6 +31,8 @@ export const products: Product[] = [
     reviewCount: 124,
     customizable: true,
     flavors: 'Forest Raspberry Rose, Tahitian Orchid Vanilla, Sicilian Blood Orange',
+    shopifyHandle: 'vegan-truffle-collection',
+    shopifyVariantId: '32462280720480',
   },
   {
     id: 'exotic-truffle-collection-9pc',
@@ -34,6 +44,7 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 312,
     customizable: false,
+    shopifyHandle: 'exotic-truffle-collection-9-pieces',
   },
   {
     id: 'dark-chocolate-truffle-collection',
@@ -45,6 +56,7 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 198,
     customizable: false,
+    shopifyHandle: 'dark-chocolate-truffle-collection-9-pieces',
   },
   {
     id: 'exotic-truffle-collection-16pc',
@@ -56,6 +68,7 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 267,
     customizable: false,
+    shopifyHandle: 'exotic-truffle-collection-16-pieces',
   },
   {
     id: 'vegan-truffle-collection-16pc',
@@ -67,6 +80,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 89,
     customizable: false,
+    shopifyHandle: 'high-phenolic-olive-oil-and-dark-chocolate-vegan-truffle-collection',
   },
   {
     id: 'dark-chocolate-truffle-collection-16pc',
@@ -78,5 +92,6 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 156,
     customizable: false,
+    shopifyHandle: 'dark-chocolate-truffle-collection-16-pieces',
   },
 ];

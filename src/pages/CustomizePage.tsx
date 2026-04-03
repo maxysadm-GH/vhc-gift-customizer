@@ -29,6 +29,7 @@ export function CustomizePage() {
           previewImages={previewImages}
           previewMessage={previewMessage}
           companyName={state.companyName}
+          state={state}
           dispatch={dispatch}
         />
       );

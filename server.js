@@ -205,6 +205,96 @@ app.post('/webhook/customize-preview', async (req, res) => {
   }
 });
 
+// --- 4. POST /api/log-order — Log checkout initiation to Airtable Custom_Orders table ---
+app.post('/api/log-order', async (req, res) => {
+  try {
+    const {
+      company_name, email, quantity, level,
+      box_color, foil_color, ribbon_color,
+      font, marquee_style, hang_tag_style,
+      message, logo_url, session_id,
+      shopify_cart_id, checkout_url,
+    } = req.body;
+
+    if (!company_name) return res.status(400).json({ success: false, error: 'company_name required' });
+
+    const apiKey = process.env.AIRTABLE_API_KEY;
+    const baseId = process.env.AIRTABLE_BASE_ID;
+
+    if (apiKey && baseId) {
+      const orderId = `ORD-${Date.now()}`;
+      const customizationNote = [
+        `Level: ${level}`,
+        `Box: ${box_color}`,
+        `Foil: ${foil_color}`,
+        `Ribbon: ${ribbon_color}`,
+        `Font: ${font}`,
+        `Marquee: ${marquee_style}`,
+        `Hang Tag: ${hang_tag_style}`,
+        message ? `Message: ${message}` : null,
+        logo_url ? `Logo: ${logo_url}` : null,
+        session_id ? `Session: ${session_id}` : null,
+        shopify_cart_id ? `Cart ID: ${shopify_cart_id}` : null,
+      ].filter(Boolean).join(' | ');
+
+      const record = {
+        fields: {
+          Order_ID: orderId,
+          Status: 'Checkout Initiated',
+          Client_Name: company_name,
+          Email: email || '',
+          Product: ['TC-VEG-009 — 9-Piece Vegan Truffle Collection'],
+          Quantity: quantity || 0,
+          Notes: customizationNote,
+          Mockup_URLs: logo_url ? [logo_url] : [],
+        },
+      };
+
+      try {
+        const airtableRes = await fetch(
+          `https://api.airtable.com/v0/${baseId}/Custom_Orders`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(record),
+          }
+        );
+        if (!airtableRes.ok) {
+          const err = await airtableRes.text();
+          console.warn('Airtable log warning:', err);
+        }
+      } catch (airtableErr) {
+        console.warn('Airtable log failed (non-fatal):', airtableErr);
+      }
+
+      // Also trigger n8n workflow for full processing (AI mockup generation etc)
+      const n8nWebhookUrl = process.env.N8N_CUSTOMIZER_WEBHOOK_URL;
+      if (n8nWebhookUrl) {
+        fetch(n8nWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_id: orderId,
+            company_name, email, quantity, level,
+            box_color, foil_color, ribbon_color,
+            font, marquee_style, hang_tag_style,
+            message, logo_url,
+            shopify_cart_id, checkout_url,
+          }),
+        }).catch(err => console.warn('n8n webhook (non-fatal):', err));
+      }
+    }
+
+    res.json({ success: true, message: 'Order logged' });
+  } catch (err) {
+    console.error('Log order error:', err);
+    res.status(500).json({ success: false, error: 'Failed to log order' });
+  }
+});
+
 // Health check
 app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
