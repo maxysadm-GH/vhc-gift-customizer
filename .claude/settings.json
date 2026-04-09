@@ -1,1 +1,95 @@
-{}
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/session-start.mjs\"",
+            "timeout": 10,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/user-prompt-submit.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/pre-tool-use-read.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/pre-tool-use-write.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ],
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/cwd-changed.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/session-end.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/maxys/Projects/claude-code-lane-lock/bin/task-created.mjs\"",
+            "timeout": 5,
+            "__lane_lock": "0.1.0"
+          }
+        ],
+        "__lane_lock": "0.1.0"
+      }
+    ]
+  }
+}
